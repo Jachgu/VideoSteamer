@@ -1,0 +1,16 @@
+# This is a basic workflow to help you get started with Actions
+
+name: mediamtx.yml modification for broadcast video and audio
+------------------------latest as of 19 June 2024-------------------
+
+paths:
+   camaudio:
+    runOnInit: ffmpeg -re -f pulse -thread_queue_size 64  -i 4 -ac 1  -f v4l2 -thread_queue_size 64 -i /dev/video0 -map 0 -map 1 -pix_fmt yuv420p -video_size 640x480 -tune zerolatency -framerate 60 -preset ultrafast -c:v libx264 -c:a libopus -b:v 600k -b:a 128k -f rtsp rtsp://localhost:$
+RTSP_PORT/$MTX_PATH
+    runOnInitRestart: yes
+
+
+This is added to a stock mediamtx.yml file.
+The -i 4 is just an example.  the exact setting for the pulse <input_options> -i <input_device> is derived from the results of the command "pactl list short sources"
+See https://trac.ffmpeg.org/wiki/Capture/PulseAudio for more information about configuring pulseaudio in ffmpeg. 
+
